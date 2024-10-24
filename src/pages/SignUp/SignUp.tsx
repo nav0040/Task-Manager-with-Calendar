@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
 import { Loader, Lock, Mail, User } from "lucide-react";
@@ -75,21 +75,21 @@ const SignUp = () => {
                         type='text'
                         placeholder='Full Name'
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e:any) => setName(e.target.value)}
                     />
                     <Input
                         icon={Mail}
                         type='email'
                         placeholder='Email Address'
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e:any) => setEmail(e.target.value)}
                     />
                     <Input
                         icon={Lock}
                         type='password'
                         placeholder='Password'
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e:any) => setPassword(e.target.value)}
                     />
 
                     <PasswordStrengthMeter password={password} setStrong={setStrong} />

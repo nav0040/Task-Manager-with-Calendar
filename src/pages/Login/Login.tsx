@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import type { FormProps } from 'antd';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import { Toaster, toast } from 'react-hot-toast';
 
 import axios from '../../instances/config.js'
 import { login } from '../../slices/userSlice.js';
+import { RootState } from '../../store.js';
 
 
 type FieldType = {
@@ -21,7 +22,7 @@ type FieldType = {
 
 const Login: React.FC = () => {
 
-  const { user } = useSelector((state)=> state.user)
+  const { user } = useSelector((state:RootState)=> state.user)
 
 
     const dispatch = useDispatch();

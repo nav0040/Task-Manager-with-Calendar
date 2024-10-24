@@ -1,9 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 import type { InputRef, TableColumnsType, TableColumnType } from 'antd';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, Input, Space, Table, Tag } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import moment from 'moment';
 
 interface DataType {
   key: string;
@@ -14,37 +17,24 @@ interface DataType {
 
 type DataIndex = keyof DataType;
 
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Joe Black',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Jim Green',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-  },
-];
+
+
+const statusColors:{ [key:string]:string}={
+    PENDING:'grey',
+    TODO:'blue',
+    IN_PROGRESS:'orange',
+    IN_REVIEW:'purple',
+    COMPLETED:'green',
+}
 
 const TaskTable: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<InputRef>(null);
+
+  const {tasks} = useSelector((state:RootState)=> state.tasks);
+  console.log(tasks);
+  
 
   const handleSearch = (
     selectedKeys: string[],
@@ -140,30 +130,56 @@ const TaskTable: React.FC = () => {
 
   const columns: TableColumnsType<DataType> = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      width: '30%',
-      ...getColumnSearchProps('name'),
+      title: 'title',
+      dataIndex: 'title',
+      key: 'title',
+    //   width: '30%',
+      ...getColumnSearchProps('title'),
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-      width: '20%',
-      ...getColumnSearchProps('age'),
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+    //   width: '20%',
+      ...getColumnSearchProps('description'),
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      ...getColumnSearchProps('address'),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortDirections: ['descend', 'ascend'],
+      title: 'Due Date',
+      dataIndex: 'dueDate',
+      key: 'dueDate',
+      ...getColumnSearchProps('dueDate'),
+    render:(dueDate:string)=> moment(dueDate).format('YYYY-MM-DD')
     },
+    {
+        title: 'Assigned To',
+        dataIndex: 'assignedTo',
+        key: 'assignedTo',
+        // width: '20%',
+        ...getColumnSearchProps('assignedTo'),
+        render:(assignedTo:string)=> <div className='flex flex-col'>
+            <span>{assignedTo.name}</span>
+            <span>{assignedTo.email}</span>
+
+        </div>
+      },
+      {
+        title: 'Priority',
+        dataIndex: 'priority',
+        key: 'priority',
+        // width: '20%',
+        ...getColumnSearchProps('priority'),
+      },
+      {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        // width: '20%',
+        ...getColumnSearchProps('status'),
+        render:(status: string)=> <Tag color={statusColors[status]}>{status}</Tag>
+      },
   ];
 
-  return <Table<DataType> columns={columns} dataSource={data} rowKey={(record) => record._id} className="custom-ant-table" />;
+  return <Table<DataType> columns={columns} dataSource={tasks}  className="custom-ant-table" />;
 };
 
 export default TaskTable;
