@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs } from 'antd';
+import TaskTable from './TaskTable';
 // import type { TabsProps } from 'antd';
 
 const onChange = (key: string) => {
@@ -12,7 +13,7 @@ const TaskViewSwitcher: React.FC = () =>  {
     return (
       <Tabs defaultActiveKey="1" centered className=''>
         <TabPane tab="Table" key="1" className='text-white'>
-          Content of Tab Pane 1
+          <TaskTable />
         </TabPane>
         <TabPane tab="Kanban" key="2">
           Content of Tab Pane 2
