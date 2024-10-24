@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import { Check, X } from "lucide-react";
 
 
-const PasswordCriteria = ({ password }) => {
+const PasswordCriteria = ({ password }:any) => {
     const criteria = [
         { label: "At least 6 characters", met: password.length >= 6 },
         { label: "Contains uppercase letter", met: /[A-Z]/.test(password) },
@@ -33,9 +33,9 @@ const PasswordCriteria = ({ password }) => {
 }
 
 
-const PasswordStrengthMeter = ({ password,setStrong }) => {
+const PasswordStrengthMeter = ({ password,setStrong }:any) => {
 
-    const getStrength = (pass) => {
+    const getStrength = (pass:any) => {
         let strength = 0;
         if (pass.length >= 6) strength++;
         if (pass.match(/[a-z]/) && pass.match(/[A-Z]/)) strength++;
@@ -50,7 +50,7 @@ const PasswordStrengthMeter = ({ password,setStrong }) => {
 
     const strength = getStrength(password);
 
-    const getColor = (strength) => {
+    const getColor = (strength:any) => {
         if (strength === 0) return "bg-red-500";
         if (strength === 1) return "bg-red-400";
         if (strength === 2) return "bg-yellow-500";
@@ -58,7 +58,7 @@ const PasswordStrengthMeter = ({ password,setStrong }) => {
         return "bg-green-500";
     };
 
-    const getStrengthText = (strength) => {
+    const getStrengthText = (strength:any) => {
         if (strength === 0) return "Very Weak";
         if (strength === 1) return "Weak";
         if (strength === 2) return "Fair";

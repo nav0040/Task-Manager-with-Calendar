@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Input = ({ icon: Icon, ...props }) => {
+const Input = ({ icon: Icon, ...props }:any) => {
 
 	const [passwordVisible, setPasswordVisible] = useState(false);
 
