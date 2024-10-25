@@ -48,7 +48,7 @@ const TaskDetails: React.FC = () => {
 
     const fetchEmployees = async () => {
         try {
-          const response = await axios.get('/auth/all-employees');
+          const response = await axios.get('/auth/all-employees',{withCredentials: true});
           setEmployees(response.data.employees);
           console.log(response);
     

@@ -19,7 +19,7 @@ const Home = () => {
 
     const getTasks = async()=>{
         try {
-            const res = await axios.get('/tasks/getAll');
+            const res = await axios.get('/tasks/getAll',{withCredentials: true});
             console.log(res);
             dispatch(setTasks(res.data.tasks))
 
