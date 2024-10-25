@@ -7,6 +7,8 @@ import Home from './pages/Home/Home'
 import { RootState } from './store'
 import { useSelector } from 'react-redux'
 import SideBar from './components/common/SideBar'
+import PrivateRoute from './routes/PrivateRoute'
+import Employees from './pages/Employees/Employees'
 
 function App() {
 
@@ -28,7 +30,9 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<PrivateRoute element={Home} />} />
+        <Route path='/employees' element={<PrivateRoute element={Employees} />} />
+
 
 
       </Routes>
