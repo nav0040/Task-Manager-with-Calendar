@@ -17,6 +17,7 @@ const localizer = momentLocalizer(moment);
 const CalendarTask: React.FC = () => {
 
   const { user } = useSelector((state: RootState) => state.user);
+  
 
 
   const [tasks, setTasks] = useState<any[]>([]);
@@ -116,16 +117,19 @@ const CalendarTask: React.FC = () => {
       fetchEmployees();
 
     }
-  }, []);
+  }, [setTasks]);
 
 
   const handleSubmit = async (taskData: any) => {
     try {
       if (isEdit) {
-        // await axios.put()
+        await axios.put(`/tasks/${selectedTask._id}`,taskData)
+        toast.success('Task Updated Successfully')
+        // console.log(taskData);
+        
       } else {
         await axios.post('/tasks/create', taskData);
-        message.success('Task created successfully');
+        toast.success('Task created successfully');
       }
       fetchTasks();
     } catch (error) {
@@ -232,18 +236,7 @@ const CalendarTask: React.FC = () => {
         isEdit={isEdit}
       />
 
-      {selectedTask && (
-        <Popconfirm
-          title="Are you sure to delete this task?"
-          // onConfirm={() => handleDeleteTask(selectedTask._id)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button danger style={{ marginTop: 20 }}>
-            Delete Selected Task
-          </Button>
-        </Popconfirm>
-      )}
+      
     </div>
   )
 }

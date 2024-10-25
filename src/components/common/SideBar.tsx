@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from "framer-motion";
 import { BarChart2, DollarSign, LogOut, Menu, Settings, ShoppingBag, ShoppingCart, TrendingUp, Users } from "lucide-react";
 import { logout } from '../../slices/userSlice';
+import { RootState } from '../../store';
 
 const SIDEBAR_ITEMS = [
     {
@@ -11,24 +12,37 @@ const SIDEBAR_ITEMS = [
         icon: BarChart2,
         color: "#6366f1",
         href: "/",
+        roles: ["Manager", "Employee"]
     },
-    { name: "Employees", icon: Users, color: "#EC4899", href: "/employees" },
+    {
+        name: "Employees",
+        icon: Users,
+        color: "#EC4899",
+        href: "/employees",
+        roles: ["Manager"]
+    },
 
 ];
 
 const SideBar: React.FC = () => {
 
+    const { user } = useSelector((state: RootState) => state.user);
+
+
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    
-    const logoutHandler =() => {
+
+    const filteredNavItems = SIDEBAR_ITEMS.filter((item) => item.roles.includes(user.role) )
+
+
+    const logoutHandler = () => {
         dispatch(logout());
         navigate("/login");
-    
-      }
-    
+
+    }
+
 
     return (
         <motion.div
@@ -49,7 +63,7 @@ const SideBar: React.FC = () => {
                 </motion.button>
                 <nav className='mt-8 flex-grow'>
                     {
-                        SIDEBAR_ITEMS.map((item) => (
+                        filteredNavItems.map((item) => (
                             <Link key={item.href} to={item.href}>
                                 <motion.div className='flex items-center p-4 text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors mb2'>
                                     <item.icon size={20} style={{ color: item.color, minWidth: "20px" }} />
@@ -91,7 +105,7 @@ const SideBar: React.FC = () => {
                                     animate={{ opacity: 1, width: "auto" }}
                                     exit={{ opacity: 0, width: 0 }}
                                     transition={{ duration: 0.3, delay: 0.4 }}
-                                  onClick={logoutHandler}
+                                    onClick={logoutHandler}
                                 >
                                     Logout
                                 </motion.p>

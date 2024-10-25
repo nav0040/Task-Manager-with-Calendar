@@ -22,7 +22,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onCancel, onSubmit, task
             form.setFieldsValue({
                 title: taskData.title,
                 description: taskData.description,
-                assignedTo: taskData.assignedTo?.name,
+                assignedTo: taskData.assignedTo?._id,
                 dueDate: taskData.start ? moment(taskData.start) : null,
                 priority: taskData.priority || 'low',
                 status: taskData.status || 'PENDING',
@@ -39,6 +39,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onCancel, onSubmit, task
             dueDate: values.dueDate.format('YYYY-MM-DD'), // Format date for submission
         };
         onSubmit(taskDataToSubmit);
+        console.log(values);
+        
     };
 
     return (

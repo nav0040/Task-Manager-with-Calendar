@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TaskTable from './TaskTable';
 import { Button, DatePicker, Form, Input, message, Modal, Select } from 'antd';
 import axios from '../../instances/config'
@@ -13,6 +13,8 @@ const TaskDetails: React.FC = () => {
     const {user} = useSelector((state:RootState)=> state.user);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+  const [employees, setEmployees] = useState<any[]>([]);
+
     const dispacth = useDispatch();
 
     const showModal = () => {
@@ -42,6 +44,30 @@ const TaskDetails: React.FC = () => {
         }
 
     }
+
+
+    const fetchEmployees = async () => {
+        try {
+          const response = await axios.get('/auth/all-employees');
+          setEmployees(response.data.employees);
+          console.log(response);
+    
+    
+        } catch (error) {
+          console.error(error);
+          message.error('Error fetching employees');
+    
+        }
+      }
+
+      useEffect(() => {
+        
+    
+        if (user.role == "Manager") {
+          fetchEmployees();
+    
+        }
+      }, []);
     return (
         <div>
             <Toaster />
@@ -72,9 +98,19 @@ const TaskDetails: React.FC = () => {
                     <Form.Item name="dueDate" label="Due Date" rules={[{ required: true, message: 'Please select due date' }]}>
                         <DatePicker />
                     </Form.Item>
-                    <Form.Item name="assignedTo" label="Assigned To" rules={[{ required: true, message: 'Please assign to someone' }]}>
-                        <Input />
-                    </Form.Item>
+                    <Form.Item
+                    label="Assign To"
+                    name="assignedTo"
+                    rules={[{ required: true, message: 'Please select an employee!' }]}
+                >
+                    <Select placeholder="Select an employee">
+                        {employees.map((employee) => (
+                            <Option key={employee._id} value={employee._id}>
+                                {employee.name}
+                            </Option>
+                        ))}
+                    </Select>
+                </Form.Item>
 
                     <Form.Item name="priority" label="Priority" rules={[{ required: true }]}>
                         <Select>

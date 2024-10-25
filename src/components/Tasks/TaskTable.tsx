@@ -155,7 +155,7 @@ const TaskTable: React.FC = () => {
         dataIndex: 'assignedTo',
         key: 'assignedTo',
         // width: '20%',
-        ...getColumnSearchProps('assignedTo'),
+      
         render:(assignedTo:string)=> <div className='flex flex-col'>
             <span>{assignedTo.name}</span>
             <span>{assignedTo.email}</span>
@@ -167,7 +167,7 @@ const TaskTable: React.FC = () => {
         dataIndex: 'createdBy',
         key: 'createdBy',
         // width: '20%',
-        ...getColumnSearchProps('createdBy'),
+    
         render:(createdBy:string)=> <div className='flex flex-col'>
             <span>{createdBy.name}</span>
             <span>{createdBy.email}</span>
@@ -191,7 +191,8 @@ const TaskTable: React.FC = () => {
       },
   ];
 
-  return <Table<DataType> columns={columns} dataSource={tasks}  className="custom-ant-table" />;
+  return <Table<DataType> columns={columns} dataSource={tasks}  scroll={{ x: 'max-content' }} 
+  pagination={{ pageSize: 5 }}  className="custom-ant-table" />;
 };
 
 export default TaskTable;
