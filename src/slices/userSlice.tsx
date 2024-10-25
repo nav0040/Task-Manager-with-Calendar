@@ -3,8 +3,9 @@ import Cookies from 'js-cookie';
 
 
 
+
 const initialState = {
-    user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null,
+    user: Cookies.get('user') ? JSON.parse(Cookies.get('user') || '{}') : null,
 };
 
 

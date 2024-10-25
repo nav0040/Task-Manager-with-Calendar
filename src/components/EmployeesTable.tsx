@@ -1,5 +1,5 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table, Tooltip } from 'antd';
+import { Button, Input, Space, Table } from 'antd';
 import moment from 'moment';
 import React, { useRef, useState } from 'react'
 import Highlighter from 'react-highlight-words';
@@ -9,25 +9,29 @@ const EmployeesTable: React.FC = ({ data }) => {
 
 
 
-    const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [editingData, setEditingData] = useState({});
+
 
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    const handleSearch = (selectedKeys: string[], confirm: () => void, dataIndex: string) => {
         confirm();
         setSearchText(selectedKeys[0]);
         setSearchedColumn(dataIndex);
     };
-    const handleReset = (clearFilters) => {
+    const handleReset = (clearFilters: () => void) => {
         clearFilters();
         setSearchText('');
     };
-    const getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+    const getColumnSearchProps = (dataIndex: string) => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }: {
+            setSelectedKeys: (selectedKeys: React.Key[]) => void;
+            selectedKeys: React.Key[];
+            confirm: () => void;
+            clearFilters?: () => void;
+            close?: () => void;
+        }) => (
             <div
                 style={{
                     padding: 8,
@@ -92,14 +96,14 @@ const EmployeesTable: React.FC = ({ data }) => {
                 </Space>
             </div>
         ),
-        filterIcon: (filtered) => (
+        filterIcon: (filtered:boolean) => (
             <SearchOutlined
                 style={{
                     color: filtered ? '#1677ff' : undefined,
                 }}
             />
         ),
-        onFilter: (value, record) =>
+        onFilter: (value: string, record: any) =>
             record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
         onFilterDropdownOpenChange: (visible) => {
             if (visible) {
@@ -128,7 +132,7 @@ const EmployeesTable: React.FC = ({ data }) => {
             key: 'name',
             width: '20%',
             ...getColumnSearchProps('name'),
-            render:(text,record)=>(
+            render: (text, record) => (
                 <div className='flex items-center gap-3'>
                     <img src={record.photo} alt="" className='rounded-full w-[50px] h-50px]' />
                     <span>{record.name}</span>
@@ -158,39 +162,8 @@ const EmployeesTable: React.FC = ({ data }) => {
             render: (createdAt) => moment(createdAt).format('YYYY-MM-DD'),
 
         },
-    
-        // {
-        //   title: 'Action',
-        //   dataIndex: 'action',
-        //   key: 'action',
-        //   width: '10%',
-        //   render: (text, record) => (
-        //     <div className='flex gap-4'>
-        //       <Popconfirm
-        //         title="Delete the Customer"
-        //         description="Are you sure to delete this item?"
-        //         onConfirm={() => confirm(record._id)}
-        //         onCancel={cancel}
-        //         okText="Yes"
-        //         cancelText="No"
-        //       >
-        //         <AiOutlineDelete className='text-[25px] cursor-pointer' />
-        //       </Popconfirm>
 
-        //       <CiEdit className='text-[25px] cursor-pointer' onClick={()=>showLoading(record)} />
-        //       <EditModal
-        //         showLoading={showLoading}
-        //         loading={loading}
-        //         editingData={editingData}
-        //         setLoading={setLoading}
-        //         setOpen={setOpen}
-        //         open={open}
-        //         handleOk={handleOk}
-        //         handleCancel={handleCancel}
-        //       />
-        //     </div>
-        //   )
-        // },
+
     ];
 
 
