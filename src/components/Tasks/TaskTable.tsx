@@ -163,6 +163,18 @@ const TaskTable: React.FC = () => {
         </div>
       },
       {
+        title: 'Assigned By',
+        dataIndex: 'createdBy',
+        key: 'createdBy',
+        // width: '20%',
+        ...getColumnSearchProps('createdBy'),
+        render:(createdBy:string)=> <div className='flex flex-col'>
+            <span>{createdBy.name}</span>
+            <span>{createdBy.email}</span>
+
+        </div>
+      },
+      {
         title: 'Priority',
         dataIndex: 'priority',
         key: 'priority',

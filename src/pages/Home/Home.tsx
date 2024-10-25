@@ -6,10 +6,16 @@ import axios from '../../instances/config.ts'
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setTasks } from "../../slices/taskSlice.tsx";
+import { RootState } from "../../store.ts";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
 
+  const {user} = useSelector((state:RootState)=> state.user);
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const getTasks = async()=>{
         try {
@@ -25,6 +31,9 @@ const Home = () => {
 
     useEffect(() => {
       getTasks();
+      if(!user){
+        navigate('/login')
+      }
     }, [])
     
     return (

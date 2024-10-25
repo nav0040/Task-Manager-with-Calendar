@@ -1,15 +1,16 @@
 
 import React, { useEffect, useState } from 'react';
-import type { FormProps } from 'antd';
-import { Button, Form, Input } from 'antd';
-
+import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
+import { Loader, Lock, Mail, User } from "lucide-react";
+
 import { useDispatch, useSelector } from 'react-redux';
 import { Toaster, toast } from 'react-hot-toast';
 
 import axios from '../../instances/config.js'
 import { login } from '../../slices/userSlice.js';
 import { RootState } from '../../store.js';
+import Input from '../../components/Input.js';
 
 
 type FieldType = {
@@ -25,37 +26,41 @@ const Login: React.FC = () => {
   const { user } = useSelector((state:RootState)=> state.user)
 
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
 
-    const onFinish: FormProps<FieldType>['onFinish'] = async(values) => {
-        // console.log('Success:', values);
-        setLoading(true);
 
-        try {
-            const res = await axios.post('/auth/login', values);
-            console.log(res);
+  const handleLogin = async (e: any) => {
+      e.preventDefault();
+      setLoading(true);
 
-            setLoading(false);
-            toast.success(res.data.message);
+ 
+          try {
+              const res = await axios.post('/auth/login', {
+                  email, password
+              });
+              console.log(res);
 
-            dispatch(login(res.data.user))
+              setLoading(false);
+              toast.success(res.data.message);
 
-            
-            navigate('/');
+              dispatch(login(res.data.user))
 
-        } catch (error) {
-            // console.log(error);
-            toast.error(error.response.data.message);
-            
-        }
-    };
+
+              navigate('/');
+
+          } catch (error) {
+              // console.log(error);
+              toast.error(error.response.data.message);
+
+          }
     
-    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+
+  };
 
 
     useEffect(() => {
@@ -65,54 +70,61 @@ const Login: React.FC = () => {
       }, [user])
     
     return (
-        <div className="flex-1 overflow-auto relative z-10">
-            <Toaster />
+        <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className='flex flex-col justify-center items-center h-[100vh] w-full'
+    >
+        <Toaster />
+
+        <div className='p-8 w-[400px]  bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl '>
+            <h2 className='text-3xl  font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
+            Welcome Back
+            </h2>
+
+            <form onSubmit={handleLogin}>
+                
+                <Input
+                    icon={Mail}
+                    type='email'
+                    placeholder='Email Address'
+                    value={email}
+                    onChange={(e:any) => setEmail(e.target.value)}
+                />
+                <Input
+                    icon={Lock}
+                    type='password'
+                    placeholder='Password'
+                    value={password}
+                    onChange={(e:any) => setPassword(e.target.value)}
+                />
 
 
-            <div className='flex justify-center items-center h-[100vh]'>
-                <Form
-                    name="basic"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
-                    style={{ maxWidth: 600 }}
-                    initialValues={{ remember: true }}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                    autoComplete="off"
-                    className='w-[70%]  border-[1px] border-gray-700 py-8 flex flex-col justify-center items-center'
+
+                <motion.button
+                    className='mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
+                 font-bold rounded-lg shadow-lg hover:from-green-600
+                 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+                 focus:ring-offset-gray-900 transition duration-200'
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type='submit'
+                    disabled={loading}
+
                 >
-                    <Form.Item<FieldType>
-
-                        name="email"
-                        rules={[{ required: true, message: 'Please input your email!' }]}
-                    >
-                        <Input placeholder='Enter your email' type='email' className='w-[300px] h-[50px]' />
-                    </Form.Item>
-
-                    <Form.Item<FieldType>
-
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
-                    >
-                        <Input.Password placeholder='Enter your Password' className='w-[300px] h-[50px]   p-3 rounded-md ' />
-                    </Form.Item>
-
-
-
-                    <Form.Item >
-                        <Button type="primary" htmlType="submit" className='mt-5 w-[300px] h-[50px]'>
-                        {loading ? 'Loading...' : 'Sign In'}
-                        </Button>
-                    </Form.Item>
-                    <Link to={'/register'} className='text-gray-400 my-2'>Don't have an account</Link>
-
-                </Form>
-
-
-            </div>
-
-
+                    {loading ? <Loader className=' animate-spin mx-auto' size={24} /> : "Login"}
+                </motion.button>
+            </form>
         </div>
+        <div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center items-center gap-2 mt-2 rounded-md'>
+            <p className='text-sm text-gray-400'>Don't have an account ? {" "}</p>
+            <Link to={"/signup"} className='text-green-400 hover:underline'>
+                Register
+            </Link>
+        </div>
+
+    </motion.div>
     )
 }
 

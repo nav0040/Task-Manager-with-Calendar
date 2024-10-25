@@ -47,3 +47,14 @@
     color: white !important;
 
 }
+
+.ant-tabs-tab{
+       background-color: rgba(53, 75, 104, 0.5) !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    font-weight: 500 !important;
+    letter-spacing: 1px;
+    border-top-left-radius: 10px;
+    border-top-right-radius:10px ;
+    
+}

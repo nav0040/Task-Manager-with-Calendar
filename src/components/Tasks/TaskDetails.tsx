@@ -5,9 +5,12 @@ import axios from '../../instances/config'
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { addTask } from '../../slices/taskSlice';
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
 const { Option } = Select;
 
 const TaskDetails: React.FC = () => {
+    const {user} = useSelector((state:RootState)=> state.user);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dispacth = useDispatch();
@@ -42,14 +45,14 @@ const TaskDetails: React.FC = () => {
     return (
         <div>
             <Toaster />
-            <div className='flex justify-end'>
+            {user.role === "Manager" && <div className='flex justify-end'>
                 <button
                     onClick={showModal}
                     className=' border border-gray-500 my-2 bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl hover:bg-gray-800 px-6 py-4 leading-3 tracking-[1px]'>
                     Create Task
                 </button>
 
-            </div>
+            </div>}
             <Modal title="Create Task" open={isModalOpen} footer >
 
                 <Form

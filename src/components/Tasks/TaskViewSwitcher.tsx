@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import TaskDetails from './TaskDetails';
 import { Tabs } from 'antd';
 import KanbanBoard from '../KanbanBoard';
+import CalendarTask from './CalendarTask';
+
 
 
 
@@ -18,7 +20,7 @@ const TaskViewSwitcher: React.FC = () => {
         <KanbanBoard/>
       </TabPane>
       <TabPane tab="Calendar" key="3">
-        Content of Tab Pane 3
+        <CalendarTask />
       </TabPane>
     </Tabs>
   );
